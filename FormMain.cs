@@ -38,6 +38,10 @@ namespace HazeronOnlineHistory
         {
             try
             {
+                // Start label.
+                tbxRecord.Text = $"Getting data from {URL_PLAYERHISTORY}";
+                int dataCount = 0;
+
                 // Define a record variable.
                 KeyValuePair<DateTime, int> record = new KeyValuePair<DateTime, int>(_httpLastUpdate, 0);
 
@@ -86,15 +90,20 @@ namespace HazeronOnlineHistory
                             // Add the datetime and amount to the dictionary.
                             //System.Diagnostics.Debug.WriteLine(date.ToString() + "\t" + amount.ToString());
                             if (_playerHistory.ContainsKey(date))
-                                System.Diagnostics.Debug.WriteLine(string.Format("*** Duplicate Entry: {0}\t{1}\t{2}", date.ToString(), amount.ToString(), _playerHistory[date]));
+                                System.Diagnostics.Debug.WriteLine($"*** Duplicate Entry: {date}\t{amount}\t{_playerHistory[date]}");
                             else
                                 _playerHistory.Add(date, amount);
+
+                            // Increment data counter and update label.
+                            dataCount++;
+                            tbxRecord.Text = $"{dataCount} data points collected.";
+                            tbxRecord.Refresh();
                         }
                     }
                 }
 
                 // Write the record in the textbox.
-                tbxRecord.Text = string.Format("Current highest recorded number of online avatars at one time was {0} at {1}", record.Value.ToString(), record.Key.ToString());
+                tbxRecord.Text = $"Current highest recorded number of online avatars at one time was {record.Value} at {record.Key}";
             }
             catch (WebException ex)
             {
@@ -103,7 +112,7 @@ namespace HazeronOnlineHistory
                 if (response != null && response.StatusCode == HttpStatusCode.NotModified)
                 {
                     // The last HTTP GET attempt is still the latest, do nothing.
-                    System.Diagnostics.Debug.WriteLine(string.Format("*** HTTP GET IfModifiedSince Error: {0}\t{1}", _httpLastUpdate, response.LastModified));
+                    System.Diagnostics.Debug.WriteLine($"*** HTTP GET IfModifiedSince Error: {_httpLastUpdate}\t{response.LastModified}");
                     _httpLastUpdate = response.LastModified;
                 }
                 else
