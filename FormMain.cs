@@ -17,7 +17,7 @@ namespace HazeronOnlineHistory
 {
     public partial class FormMain : Form
     {
-        const string URL_PLAYERHISTORY = @"http://www.hazeron.com/playerhistory.txt";
+        const string URL_PLAYERHISTORY = @"https://hazeron.com/playerhistory.txt";
         Dictionary<DateTime, int> _playerHistory;
         CultureInfo _providerCI = CultureInfo.InvariantCulture;
         DateTime _httpLastUpdate = new DateTime(2015, 10, 28);
